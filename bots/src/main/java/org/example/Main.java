@@ -12,22 +12,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        while(true) {
-
-//            WebDriver driver = new ChromeDriver();
-//            driver.get("https://www.google.com");
-//            driver.switchTo().newWindow(WindowType.TAB);
-////            driver.wait(1000);
-//
-//            driver.wait(100,0);
-//            driver.close();
 
             Conta conta = new Conta();
+
             conta.contaIG = "rod_stqtic";
-            conta.senhaIG= "15466231";
+            conta.senhaIG= "15466231Art";
             conta.logins();
             conta.irParaAcoes();
-        }
+            conta.realizarAcoes();
 
         //movimentarContas();
 
