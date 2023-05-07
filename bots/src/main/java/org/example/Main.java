@@ -15,8 +15,8 @@ public class Main {
 
             Conta conta = new Conta();
 
-            conta.contaIG = "rod_stqtic";
-            conta.senhaIG= "15466231Art";
+            conta.contaIG = "auroradelaide9";
+            conta.senhaIG= "bootnuumero04";
             conta.logins();
             conta.irParaAcoes();
             conta.realizarAcoes();

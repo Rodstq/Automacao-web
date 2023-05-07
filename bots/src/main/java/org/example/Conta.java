@@ -2,17 +2,16 @@ package org.example;
 
 import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import jdk.jfr.Timespan;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Conta {
@@ -22,12 +21,16 @@ public class Conta {
     WebDriver driver = new ChromeDriver();
 
     public  void logins(){
+        //DEFINIR TAMANHO DA JANELA
+        driver.manage().window().setSize(new Dimension(500, 860));
+        driver.manage().window().setPosition(new Point(1090, 0));
+
+
         // OBTER CONTA E SENHA DO OBJETO CRIADO
         contaIG = this.contaIG;
         senhaIG = this.senhaIG;
         // IR PRO INSTA E LOGAR
-        driver.manage().window().fullscreen();
-        driver.get("https://www.instagram.com/");
+       driver.get("https://www.instagram.com/");
         WebElement user =   new WebDriverWait(driver, Duration.ofSeconds(100))
                 .until(ExpectedConditions.elementToBeClickable(By.cssSelector("#loginForm > div > div:nth-child(1) > div > label > input")));
         user.sendKeys(contaIG);
@@ -57,6 +60,7 @@ public class Conta {
         WebElement email = driver.findElement(By.cssSelector("#uname"));
         email.sendKeys("rod.stqtic@gmail.com");
         WebElement senha = driver.findElement(By.cssSelector("#pwd"));
+        new Actions(driver).scrollToElement(senha).perform();
         senha.sendKeys("15466231");
         WebElement logar = driver.findElement(By.cssSelector("body > div.main-wrapper > div > div > div.col-lg-5.col-md-7.bg-white > div > form > div > div:nth-child(3) > button"));
         logar.click();
@@ -66,10 +70,11 @@ public class Conta {
         // SELECIONAR BARRA LATERAL E IR PARA AREA DE ESCOLHER CONTA
         String contaig = contaIG;
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        WebElement barraLateral = driver.findElement(By.cssSelector("#main-wrapper > aside > div > nav"));
+        WebElement barraLateral = driver.findElement(By.cssSelector("#main-wrapper > header > nav > div.navbar-header > a.nav-toggler.waves-effect.waves-light.d-block.d-md-none"));
+        barraLateral.click();
         Actions action = new Actions(driver);
-        action.moveToElement(barraLateral).build().perform();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//        action.moveToElement(barraLateral).build().perform();
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         WebElement Acoes = driver.findElement(By.cssSelector("#sidebarnav > li:nth-child(11) > center > a > b > span"));
         Acoes.click();
         WebElement body = driver.findElement(By.cssSelector("#form_selecionar"));
@@ -100,16 +105,19 @@ public class Conta {
 
     public void realizarAcoes(){
             while(true) {
-                WebDriverWait disponivel = new WebDriverWait(driver, Duration.ofSeconds(100000));
-                disponivel.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#tarefa")));
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
 
                 WebElement acao = driver.findElement(By.cssSelector("#tarefa"));
                 String acaoTexto = acao.getText();
                 System.out.println(acaoTexto);
 
-                if (acaoTexto.equals("[IG] Curtir Publicação [R$ 0,002]")) {
+                if (acaoTexto.contains("[IG] Curtir Publicação")) {
                     curtir();
-                } else if (acaoTexto.equals("[IG] Seguir Perfil [R$ 0,005]")) {
+                } else if (acaoTexto.contains("[IG] Seguir Perfil")) {
                     seguir();
                 }
             }
@@ -120,23 +128,125 @@ public class Conta {
 
     public void curtir(){
 
-    WebElement curtir = driver.findElement(By.cssSelector("#btn-acessar"));
-    curtir.click();
+        String url1 = driver.getCurrentUrl();
+        System.out.println(url1);
 
-//    WebElement confirmar = driver.findElement(By.cssSelector("#btn-confirmar"));
-//    confirmar.click();
+        try {
+        Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        }
+
+        WebElement acessarCurtir = driver.findElement(By.cssSelector("#btn-acessar"));
+        acessarCurtir.click();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        ArrayList<String> windu = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(windu.get(1));
+
+
+        String url = driver.getCurrentUrl();
+        System.out.println(url);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,500)");
+
+        List <WebElement> curtirIG = driver.findElements(By.cssSelector("button._abl-"));
+        WebElement botaoCurtir = curtirIG.get(1);
+        new Actions(driver).scrollToElement(botaoCurtir).perform();
+        botaoCurtir.click();
+
+        try {
+        Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        }
+
+        driver.close();
+
+        driver.switchTo().window(windu.get(0));
+
+        WebElement confirmar = driver.findElement(By.cssSelector("#btn-confirmar"));
+        confirmar.click();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
     }
 
 
     public void seguir(){
+
+        String originalWindow = driver.getWindowHandle();
+
+        String url1 = driver.getCurrentUrl();
+        System.out.println(url1);
+
+        try {
+        Thread.sleep(3000);
+        } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        }
+
         WebElement acessarSeguir = driver.findElement(By.cssSelector("#btn-acessar"));
         acessarSeguir.click();
 
-        WebElement seguirIG = driver.findElement(By.cssSelector("#mount_0_0_xJ > div > div > div.x9f619.x1n2onr6.x1ja2u2z > div > div > div > div.x78zum5.xdt5ytf.x10cihs4.x1t2pt76.x1n2onr6.x1ja2u2z > div.x9f619.xnz67gz.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1uhb9sk.x1plvlek.xryxfnj.x1c4vz4f.x2lah0s.x1q0g3np.xqjyukv.x1qjc9v5.x1oa3qoh.x1qughib > div.xh8yej3.x1gryazu.x10o80wk.x14k21rp.x1porb0y.x17snn68.x6osk4m > div:nth-child(2) > section > main > div > header > section > div.x6s0dn4.x78zum5.x1q0g3np.xs83m0k.xeuugli.x1n2onr6 > div.x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.xmn8rco.x1n2onr6.x1plvlek.xryxfnj.x1c4vz4f.x2lah0s.x1q0g3np.xqjyukv.x1qjc9v5.x1oa3qoh.x1nhvcw1 > div > div.x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1i64zmx.x1n2onr6.x1plvlek.xryxfnj.x1iyjqo2.x2lwn1j.xeuugli.xdt5ytf.xqjyukv.x1qjc9v5.x1oa3qoh.x1nhvcw1"));
-        seguirIG.click();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        ArrayList<String> windu = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(windu.get(1));
+
+
+       String url = driver.getCurrentUrl();
+       System.out.println(url);
+
+        try {
+        Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        }
+
+        List <WebElement> seguirIG = driver.findElements(By.tagName("button"));
+        seguirIG.get(1).click();
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        driver.close();
+        try {
+        Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        }
+        driver.switchTo().window(windu.get(0));
 
         WebElement confirmar = driver.findElement(By.cssSelector("#btn-confirmar"));
         confirmar.click();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
     }
 
 }
