@@ -4,10 +4,12 @@ import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import jdk.jfr.Timespan;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,8 @@ public class Conta {
     String contaIG;
     String senhaIG;
 
-    WebDriver driver = new ChromeDriver();
+
+    ChromeDriver driver = new ChromeDriver();
 
     public  void logins(){
         //DEFINIR TAMANHO DA JANELA
@@ -103,27 +106,30 @@ public class Conta {
         botaoIniciar.click();
     }
 
-    public void realizarAcoes(){
-            while(true) {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    public boolean realizarAcoes(){
 
-                WebElement acao = driver.findElement(By.cssSelector("#tarefa"));
-                String acaoTexto = acao.getText();
-                System.out.println(acaoTexto);
+        while(true) {
 
-                if (acaoTexto.contains("[IG] Curtir Publicação")) {
-                    curtir();
-                } else if (acaoTexto.contains("[IG] Seguir Perfil")) {
-                    seguir();
-                }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
 
+            WebElement acao = driver.findElement(By.cssSelector("#tarefa"));
+            String acaoTexto = acao.getText();
+            System.out.println(acaoTexto);
+
+            if (acaoTexto.contains("[IG] Curtir Publicação")) {
+                curtir();
+            } else if (acaoTexto.contains("[IG] Seguir Perfil")) {
+                seguir();
+            }
+
+        }
 
     }
+
 
 
     public void curtir(){
@@ -179,10 +185,11 @@ public class Conta {
         confirmar.click();
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(50000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
 
     }
 
@@ -242,7 +249,7 @@ public class Conta {
         confirmar.click();
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(50000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

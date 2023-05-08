@@ -1,30 +1,18 @@
 package org.example;
-import java.time.Duration;
-import java.util.Arrays;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-public class Main {
+public class Main extends Conta {
     public static void main(String[] args) throws InterruptedException {
 
-            Conta conta = new Conta();
 
-            conta.contaIG = "auroradelaide9";
-            conta.senhaIG= "bootnuumero04";
-            conta.logins();
-            conta.irParaAcoes();
-            conta.realizarAcoes();
+        Conta conta = new Conta();
 
-        //movimentarContas();
-
+        conta.contaIG = "leticiabastos32";
+        conta.senhaIG = "botnumero10";
+        conta.logins();
+        conta.irParaAcoes();
+        conta.realizarAcoes();
     }
-
     public static void movimentarContas(){
         String[][] contas = {
                 {"conta1", "conta2", "conta3" ,"conta4" ,"conta5" ,"conta6", "conta7"},
