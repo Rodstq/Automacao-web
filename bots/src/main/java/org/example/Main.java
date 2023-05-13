@@ -1,29 +1,42 @@
 package org.example;
 
 
-public class Main extends Conta {
-    public static void main(String[] args) throws InterruptedException {
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+public class Main {
+
+
+    public static void main(String[] args) {
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--proxy-server='direct://'");
+        options.addArguments("--proxy-bypass-list=*");
+        options.addArguments("--start-maximized");
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--ignore-certificate-errors");
+        options.addArguments("user-agent={user_agent}");
 
 
         Conta conta = new Conta();
+        conta.driver = new ChromeDriver(options);
 
-        conta.contaIG = "leticiabastos32";
-        conta.senhaIG = "botnumero10";
+        conta.contaIG = "cyber_tanker";
+        conta.senhaIG = "botnumero1";
         conta.logins();
         conta.irParaAcoes();
         conta.realizarAcoes();
-    }
-    public static void movimentarContas(){
-        String[][] contas = {
-                {"conta1", "conta2", "conta3" ,"conta4" ,"conta5" ,"conta6", "conta7"},
-                {"senha1","senha2","senha3","senha4","senha5","senha6", "senha 7"}
-        };
 
-        for (int i = 0; i < contas[0].length; i++) {
-            System.out.println("===== CONTA A POSTAR : " + contas[0][i] + " SENHA : " + contas[1][i] + "=====");
-            for (int j = 0; j < contas[0].length; j++) {
-                System.out.println("CONTA A CURTIR : " + contas[0][j] + " SENHA : " + contas[1][j]);
-            }
-        }
+        //conta.movimentarContas();
     }
+
 }

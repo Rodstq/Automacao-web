@@ -1,37 +1,38 @@
 package org.example;
 
-import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
-import jdk.jfr.Timespan;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.apache.commons.io.FileUtils;
+
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Conta {
-    String contaIG;
-    String senhaIG;
-
-
-    ChromeDriver driver = new ChromeDriver();
+    public String contaIG;
+    public String senhaIG;
+    public WebDriver driver;
 
     public  void logins(){
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+
         //DEFINIR TAMANHO DA JANELA
-        driver.manage().window().setSize(new Dimension(500, 860));
-        driver.manage().window().setPosition(new Point(1090, 0));
+        driver.manage().window().setSize(new Dimension(1800,850));
 
 
         // OBTER CONTA E SENHA DO OBJETO CRIADO
         contaIG = this.contaIG;
         senhaIG = this.senhaIG;
+
         // IR PRO INSTA E LOGAR
        driver.get("https://www.instagram.com/");
         WebElement user =   new WebDriverWait(driver, Duration.ofSeconds(100))
@@ -41,23 +42,29 @@ public class Conta {
         pwd.sendKeys(senhaIG);
         WebElement botaoLogin = driver.findElement(By.cssSelector("#loginForm > div > div:nth-child(3)"));
         botaoLogin.click();
+        System.out.println("logou insta");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
-//        WebElement agoraNao = driver.findElement(By.cssSelector("#mount_0_0_5v > div > div > div:nth-child(3) > div > div > div.x9f619.x1n2onr6.x1ja2u2z > div > div.x1uvtmcs.x4k7w5x.x1h91t0o.x1beo9mf.xaigb6o.x12ejxvf.x3igimt.xarpa2k.xedcshv.x1lytzrv.x1t2pt76.x7ja8zs.x1n2onr6.x1qrby5j.x1jfb8zj > div > div > div > div > div.x7r02ix.xf1ldfh.x131esax.xdajt7p.xxfnqb6.xb88tzc.xw2csxc.x1odjw0f.x5fp0pe > div > div > div._a9-z > button._a9--._a9_1"));
-//        agoraNao.click();
-
-//        WebDriverWait agoraNao = new WebDriverWait(driver,Duration.ofSeconds(100));
-//        agoraNao.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"mount_0_0_7S\"]/div/div/div[3]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div")));
+            //                                      tirar print
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        // Now you can do whatever you need to do with it, for example copy somewhere
+        try {
+            FileUtils.copyFile(scrFile, new File("C:\\Users\\maria\\Desktop\\automação\\fotoinsta.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
        //  IR PRO GNI E LOGAR
-
         driver.get("https://www.ganharnasredes.com/painel/?pagina=logout");
-
-        WebElement x = driver.findElement(By.cssSelector("#modalAvisoCurso > div > div > div.modal-header > button"));
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        WebElement x = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[3]/button"));
         x.click();
 
         WebElement email = driver.findElement(By.cssSelector("#uname"));
@@ -67,27 +74,44 @@ public class Conta {
         senha.sendKeys("15466231");
         WebElement logar = driver.findElement(By.cssSelector("body > div.main-wrapper > div > div > div.col-lg-5.col-md-7.bg-white > div > form > div > div:nth-child(3) > button"));
         logar.click();
+        System.out.println("logou gni");
+
     }
 
     public void irParaAcoes(){
+
         // SELECIONAR BARRA LATERAL E IR PARA AREA DE ESCOLHER CONTA
         String contaig = contaIG;
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        WebElement barraLateral = driver.findElement(By.cssSelector("#main-wrapper > header > nav > div.navbar-header > a.nav-toggler.waves-effect.waves-light.d-block.d-md-none"));
-        barraLateral.click();
         Actions action = new Actions(driver);
-//        action.moveToElement(barraLateral).build().perform();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        WebElement Acoes = driver.findElement(By.cssSelector("#sidebarnav > li:nth-child(11) > center > a > b > span"));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        WebElement Acoes = driver.findElement(By.cssSelector("#sidebarnav > li:nth-child(11) > center > a"));
         Acoes.click();
+
+        //                                                                  tirar print
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        // Now you can do whatever you need to do with it, for example copy somewhere
+        try {
+            FileUtils.copyFile(scrFile, new File("C:\\Users\\maria\\Desktop\\automação\\fotogni.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         WebElement body = driver.findElement(By.cssSelector("#form_selecionar"));
         action.moveToElement(body).build().perform();
+
         // ESCOLHENDO CONTA
         WebElement escolherConta = driver.findElement(By.cssSelector("#contaig"));
         escolherConta.click();
         WebElement conjuntoContas = driver.findElement(By.xpath("//*[@id=\"contaig\"]"));
         List<WebElement> contas = conjuntoContas.findElements(By.tagName("option"));
         String contaXpath = "";
+
+
         // FOR PARA COMPARAR A CONTA DA VEZ COM A TAG OPTION DENTRO DO BOTAO
         for(int i = 0; i < contas.size(); i++){
             String conta = contas.get(i).getText();
@@ -97,6 +121,7 @@ public class Conta {
                 System.out.println(" xpath de : " + conta + " é :  "+ contaXpath);
             }
         }
+
         //SELECIONANDO A OPTION CORRETA
         WebElement escolhida = driver.findElement(By.xpath(contaXpath));
         escolhida.click();
@@ -129,9 +154,6 @@ public class Conta {
         }
 
     }
-
-
-
     public void curtir(){
 
         String url1 = driver.getCurrentUrl();
@@ -166,8 +188,7 @@ public class Conta {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,500)");
 
-        List <WebElement> curtirIG = driver.findElements(By.cssSelector("button._abl-"));
-        WebElement botaoCurtir = curtirIG.get(1);
+        WebElement botaoCurtir = driver.findElement(By.cssSelector("._aamu._ae3_._ae47._ae48 button._abl-"));
         new Actions(driver).scrollToElement(botaoCurtir).perform();
         botaoCurtir.click();
 
@@ -181,11 +202,17 @@ public class Conta {
 
         driver.switchTo().window(windu.get(0));
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         WebElement confirmar = driver.findElement(By.cssSelector("#btn-confirmar"));
         confirmar.click();
 
         try {
-            Thread.sleep(50000);
+            Thread.sleep(60000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -230,7 +257,7 @@ public class Conta {
         }
 
         List <WebElement> seguirIG = driver.findElements(By.tagName("button"));
-        seguirIG.get(1).click();
+        seguirIG.get(0).click();
 
         try {
             Thread.sleep(3000);
@@ -249,11 +276,47 @@ public class Conta {
         confirmar.click();
 
         try {
-            Thread.sleep(50000);
+            Thread.sleep(60000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
+    }
+
+    public  void movimentarContas(){
+        String[][] contas = {
+                {"conta1", "conta2", "conta3" ,"conta4" ,"conta5" ,"conta6", "conta7"},
+                {"senha1","senha2","senha3","senha4","senha5","senha6", "senha 7"}
+        };
+
+        for (int i = 0; i < contas[0].length; i++) {
+            System.out.println("===== CONTA A POSTAR : " + contas[0][i] + " SENHA : " + contas[1][i] + "=====");
+            driver.get("https://www.instagram.com");
+            WebElement user =   new WebDriverWait(driver, Duration.ofSeconds(100))
+                    .until(ExpectedConditions.elementToBeClickable(By.cssSelector("#loginForm > div > div:nth-child(1) > div > label > input")));
+            user.sendKeys(contas[0][i]);
+            WebElement pwd = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("#loginForm > div > div:nth-child(2) > div > label > input")));
+            pwd.sendKeys(contas[1][i]);
+            WebElement botaoLogin = driver.findElement(By.cssSelector("#loginForm > div > div:nth-child(3)"));
+            botaoLogin.click();
+            for (int j = 0; j < contas[0].length; j++) {
+
+                if(contas[0][i].equals(contas[0][j])){
+
+                } else if (j > i) {
+                    break;
+                } else {
+                    driver.get("https://www.instagram.com");
+                    user = new WebDriverWait(driver, Duration.ofSeconds(100))
+                            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("#loginForm > div > div:nth-child(1) > div > label > input")));
+                    user.sendKeys(contas[0][j]);
+                    pwd = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("#loginForm > div > div:nth-child(2) > div > label > input")));
+                    pwd.sendKeys(contas[1][j]);
+                    botaoLogin = driver.findElement(By.cssSelector("#loginForm > div > div:nth-child(3)"));
+                    botaoLogin.click();
+                }
+            }
+        }
     }
 
 }
