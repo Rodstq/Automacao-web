@@ -30,8 +30,8 @@ public class Main {
         Conta conta = new Conta();
         conta.driver = new ChromeDriver(options);
 
-        conta.contaIG = "cyber_tanker";
-        conta.senhaIG = "botnumero1";
+        conta.contaIG = "conta";
+        conta.senhaIG = "senha";
         conta.logins();
         conta.irParaAcoes();
         conta.realizarAcoes();

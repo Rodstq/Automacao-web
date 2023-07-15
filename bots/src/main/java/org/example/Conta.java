@@ -58,7 +58,7 @@ public class Conta {
         }
 
        //  IR PRO GNI E LOGAR
-        driver.get("https://www.ganharnasredes.com/painel/?pagina=logout");
+        driver.get("sitegni");
         try {
             Thread.sleep(20000);
         } catch (InterruptedException e) {
@@ -68,10 +68,10 @@ public class Conta {
         x.click();
 
         WebElement email = driver.findElement(By.cssSelector("#uname"));
-        email.sendKeys("rod.stqtic@gmail.com");
+        email.sendKeys("conta");
         WebElement senha = driver.findElement(By.cssSelector("#pwd"));
         new Actions(driver).scrollToElement(senha).perform();
-        senha.sendKeys("15466231");
+        senha.sendKeys("senha");
         WebElement logar = driver.findElement(By.cssSelector("body > div.main-wrapper > div > div > div.col-lg-5.col-md-7.bg-white > div > form > div > div:nth-child(3) > button"));
         logar.click();
         System.out.println("logou gni");
@@ -283,6 +283,7 @@ public class Conta {
 
     }
 
+    // metodo para movimentação das contas (a finalizar)
     public  void movimentarContas(){
         String[][] contas = {
                 {"conta1", "conta2", "conta3" ,"conta4" ,"conta5" ,"conta6", "conta7"},
